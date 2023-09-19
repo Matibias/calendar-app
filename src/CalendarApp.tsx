@@ -1,10 +1,14 @@
+import { Provider } from 'react-redux'
 import { AppRouter } from './router'
 import { BrowserRouter } from 'react-router-dom'
+import { store } from './store'
 
 export const CalendarApp = (): JSX.Element => {
   return (
-    <BrowserRouter>
-      <AppRouter />
-    </BrowserRouter>
+    <Provider store={store}>
+      <BrowserRouter>
+        <AppRouter />
+      </BrowserRouter>
+    </Provider>
   )
 }
