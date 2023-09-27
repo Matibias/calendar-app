@@ -3,7 +3,7 @@ import { CalendarPage } from '@/calendar'
 import { Routes, Route, Navigate } from 'react-router-dom'
 
 export const AppRouter = (): JSX.Element => {
-  const authStatus = 'authenticated'
+  const authStatus = 'not-authenticated'
 
   return (
     <Routes>
