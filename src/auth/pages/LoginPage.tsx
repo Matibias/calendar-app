@@ -1,4 +1,4 @@
-import { useForm } from '@/hooks'
+import { useAuthStore, useForm } from '@/hooks'
 import './LoginPage.css'
 
 const loginFormFields = {
@@ -16,10 +16,11 @@ const registerFormFields = {
 export const LoginPage = (): JSX.Element => {
   const { loginEmail, loginPassword, onInputChange: onLoginInputChange } = useForm(loginFormFields)
   const { registerName, registerEmail, registerPassword, registerPassword2, onInputChange: onRegisterInputChange } = useForm(registerFormFields)
+  const { startLogin } = useAuthStore()
 
-  const loginSubmit = (event) => {
+  const loginSubmit = async (event) => {
     event.preventDefault()
-    console.log({ loginEmail, loginPassword })
+    await startLogin({ email: loginEmail, password: loginPassword })
   }
 
   const registerSubmit = (event) => {
