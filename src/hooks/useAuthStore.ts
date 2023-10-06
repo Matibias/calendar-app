@@ -11,7 +11,7 @@ export const useAuthStore = () => {
     try {
       const { data } = await calendarApi.post('/auth', { email, password })
       localStorage.setItem('token', data.token)
-      localStorage.setItem('token-init-date', new Date().getTime().toString())
+      localStorage.setItem('token-init-date', new Date().getTime())
       dispatch(onLogin({ name: data.name, uid: data.uid }))
     } catch (error) {
       dispatch(onLogout('Credenciales Incorrectas'))
@@ -27,11 +27,35 @@ export const useAuthStore = () => {
     try {
       const { data } = await calendarApi.post('auth/new', { name, email, password })
       localStorage.setItem('token', data.token)
-      localStorage.setItem('token-init-date', new Date().getTime().toString())
+      localStorage.setItem('token-init-date', new Date().getTime())
       dispatch(onLogin({ name: data.name, uid: data.uid }))
     } catch (error) {
       console.log({ error })
       dispatch(onLogout(error.response.data?.msg))
+    }
+  }
+
+  const checkAuthToken = async () => {
+    const token = localStorage.getItem('token')
+    if (!token) return dispatch(onLogout())
+
+    // const tokenDate = new Date(parseInt(tokenInitDate))
+    // const now = new Date()
+    // now.setHours(now.getHours() + 1)
+
+    // if (now > tokenDate) {
+    //   dispatch(onLogout('Token expirado'))
+    //   return
+    // }
+
+    try {
+      const { data } = await calendarApi.get('/auth/renew')
+      localStorage.setItem('token', data.token)
+      localStorage.setItem('token-init-date', new Date().getTime())
+      dispatch(onLogin({ name: data.name, uid: data.uid }))
+    } catch (error) {
+      localStorage.clear()
+      dispatch(onLogout())
     }
   }
 
@@ -42,7 +66,8 @@ export const useAuthStore = () => {
     errorMessage,
     // Methods
     startLogin,
-    startRegister
+    startRegister,
+    checkAuthToken
 
   }
 }
