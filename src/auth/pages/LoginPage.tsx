@@ -18,16 +18,18 @@ const registerFormFields = {
 export const LoginPage = (): JSX.Element => {
   const { loginEmail, loginPassword, onInputChange: onLoginInputChange } = useForm(loginFormFields)
   const { registerName, registerEmail, registerPassword, registerPassword2, onInputChange: onRegisterInputChange } = useForm(registerFormFields)
-  const { startLogin, errorMessage } = useAuthStore()
+  const { startLogin, startRegister, errorMessage } = useAuthStore()
 
   const loginSubmit = async (event) => {
     event.preventDefault()
     await startLogin({ email: loginEmail, password: loginPassword })
   }
 
-  const registerSubmit = (event) => {
+  const registerSubmit = async (event) => {
     event.preventDefault()
+    if (registerPassword !== registerPassword2) return await Swal.fire('Error', 'Las contraseñas deben de ser iguales', 'error')
     console.log({ registerName, registerEmail, registerPassword, registerPassword2 })
+    await startRegister({ name: registerName, email: registerEmail, password: registerPassword })
   }
 
   useEffect(() => {
