@@ -39,15 +39,6 @@ export const useAuthStore = () => {
     const token = localStorage.getItem('token')
     if (!token) return dispatch(onLogout())
 
-    // const tokenDate = new Date(parseInt(tokenInitDate))
-    // const now = new Date()
-    // now.setHours(now.getHours() + 1)
-
-    // if (now > tokenDate) {
-    //   dispatch(onLogout('Token expirado'))
-    //   return
-    // }
-
     try {
       const { data } = await calendarApi.get('/auth/renew')
       localStorage.setItem('token', data.token)
@@ -59,6 +50,11 @@ export const useAuthStore = () => {
     }
   }
 
+  const startLogout = () => {
+    localStorage.clear()
+    dispatch(onLogout())
+  }
+
   return {
     // Properties
     status,
@@ -67,7 +63,8 @@ export const useAuthStore = () => {
     // Methods
     startLogin,
     startRegister,
-    checkAuthToken
+    checkAuthToken,
+    startLogout
 
   }
 }
